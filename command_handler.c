@@ -89,7 +89,6 @@ void handle_exit(custom_args *argv, env_var *path, char *lineptr,
 		status = _atoi(argv->argv[1]);
 		if (status != 0)
 		{
-			printf("%d\n", status);
 			free_resources(path, argv);
 			free(lineptr);
 			exit(status);
