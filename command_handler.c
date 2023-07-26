@@ -49,7 +49,7 @@ char *execute_set_env(char **argv)
  * Return: Nothing.
  */
 void check_for_exit(custom_args *argv, env_var *path, char *lineptr,
-		int exit_status)
+		int *exit_status)
 {
 	if (_strcmp(argv->argv[0], "exit") == 0)
 	{
@@ -67,7 +67,7 @@ void check_for_exit(custom_args *argv, env_var *path, char *lineptr,
  * Return: Nothing.
  */
 void handle_exit(custom_args *argv, env_var *path, char *lineptr,
-		int exit_status)
+		int *exit_status)
 {
 	int status;
 	int ac = 0, i = 0;
@@ -82,7 +82,7 @@ void handle_exit(custom_args *argv, env_var *path, char *lineptr,
 	{
 		free_resources(path, argv);
 		free(lineptr);
-		exit(exit_status);
+		exit(*exit_status);
 	}
 	else if (ac == 2)
 	{

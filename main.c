@@ -47,13 +47,14 @@ char *execute_helper(custom_args *argv, env_var *path, char *argV[])
 	return (filepath);
 }
 
-char *find_and_execute(env_var *path, custom_args *argv, char **argV)
+char *find_and_execute(env_var *path, custom_args *argv, char **argV, int *exit_status)
 {
 	char *filepath = NULL;
 
 	filepath = find_executable(path, argv->argv[0]);
 	if (filepath == NULL)
 	{
+		*exit_status = 127;
 		print_err(argV[0]);
 		free_argv(argv);
 		return (NULL);
@@ -77,7 +78,7 @@ char *find_and_execute(env_var *path, custom_args *argv, char **argV)
  * Return: The file path on success, or NULL on failure.
  */
 
-char *execute_file(char *lineptr, char *argV[], int exit_status)
+char *execute_file(char *lineptr, char *argV[], int *exit_status)
 {
 	char *filepath = NULL;
 	env_var *path;
@@ -106,7 +107,7 @@ char *execute_file(char *lineptr, char *argV[], int exit_status)
 		}
 		else if (_strcmp(message, "Not setenv or unsetenv") == 0)
 		{
-			filepath = find_and_execute(path, argv, argV);
+			filepath = find_and_execute(path, argv, argV, exit_status);
 			return (filepath);
 		}
 		free_resources(path, argv);
@@ -169,7 +170,7 @@ int main(int ac, char *argV[])
 		else
 		{
 			lineptr[num_char_read - 1] = '\0';
-			memory = execute_file(lineptr, argV, exit_status);
+			memory = execute_file(lineptr, argV, &exit_status);
 			if (memory == NULL)
 			{
 				exit_status = 1;
