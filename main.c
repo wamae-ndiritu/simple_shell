@@ -88,8 +88,6 @@ char *execute_file(char *lineptr, char *argV[], int exit_status)
 			{
 				exit_status = 127;
 				print_err(argV[0]);
-				free(path->key);
-				free(path);
 				free(argv->lineptr_cpy);
 				free(argv->argv);
 				free(argv);
@@ -145,7 +143,6 @@ int main(int ac, char *argV[])
 	signal(SIGINT, signal_handler);
 	while (1)
 	{
-		/* resetting branch */
 		lineptr = NULL;
 		if (interactive_mode && ac == 1)
 			write(STDOUT_FILENO, "$ ", 2);
