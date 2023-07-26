@@ -97,7 +97,7 @@ void handle_exit(custom_args *argv, env_var *path, char *lineptr,
 		else
 		{
 			msg = "Illegal number to exit\n";
-			write(STDOUT_FILENO, msg, _strlen(msg));
+			write(STDERR_FILENO, msg, _strlen(msg));
 			free_resources(path, argv);
 			free(lineptr);
 			exit(2);
