@@ -14,14 +14,16 @@
  * @argv: pointer to struct custom_args
  * @path: pointer to structure env_var
  * @argV: pointer to command line arguments passed to main
+ * @exit_status_ptr: pointer to an integer to store the exit status of the process.
  *
  * Return: returns the filepath.
  */
 
-char *execute_helper(custom_args *argv, env_var *path, char *argV[])
+char *execute_helper(custom_args *argv, env_var *path, char *argV[], int *exit_status_ptr)
 {
 	char *filepath;
 	pid_t execve_process;
+	int exec_status;
 
 	filepath = argv->argv[0];
 	execve_process = fork();
@@ -36,14 +38,16 @@ char *execute_helper(custom_args *argv, env_var *path, char *argV[])
 		{
 			print_err(argV[0]);
 			free_struct(argv, path);
-			return (NULL);
+			exit(127);
 		}
 	}
 	else
 	{
-		wait(NULL);
+		wait(&exec_status);
 		free_struct(argv, path);
 	}
+	if (WIFEXITED(exec_status))
+		*exit_status_ptr = WEXITSTATUS(exec_status);
 	return (filepath);
 }
 /**
@@ -94,7 +98,7 @@ char *execute_file(char *lineptr, char *argV[], int exit_status)
 				return (NULL);
 			}
 			argv->argv[0] = filepath;
-			filepath = execute_helper(argv, path, argV);
+			filepath = execute_helper(argv, path, argV, &exit_status);
 			if (filepath == NULL)
 			{
 				free_resources(path, argv);
