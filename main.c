@@ -47,7 +47,8 @@ char *execute_helper(custom_args *argv, env_var *path, char *argV[])
 	return (filepath);
 }
 
-char *find_and_execute(env_var *path, custom_args *argv, char **argV, int *exit_status)
+char *find_and_execute(env_var *path, custom_args *argv,
+		char **argV, int *exit_status)
 {
 	char *filepath = NULL;
 
