@@ -20,3 +20,16 @@ void free_struct(custom_args *argv, env_var *path)
 	path->key = NULL;
 	free(path);
 }
+
+/**
+ * free_argv - free struct argv
+ * @argv: pointer to custom_args struct
+ * Return: Nothing.
+ */
+
+void free_argv(custom_args *argv)
+{
+	free(argv->lineptr_cpy);
+	free(argv->argv);
+	free(argv);
+}

@@ -83,4 +83,7 @@ void free_resources(env_var *path, custom_args *argv);
 int _setenv(const char *name, const char *value, int overwrit);
 int _unsetenv(const char *name);
 
+/*memory_functions.c */
+void free_argv(custom_args *argv);
+
 #endif

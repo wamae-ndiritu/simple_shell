@@ -46,6 +46,28 @@ char *execute_helper(custom_args *argv, env_var *path, char *argV[])
 	}
 	return (filepath);
 }
+
+char *find_and_execute(env_var *path, custom_args *argv, char **argV)
+{
+	char *filepath = NULL;
+
+	filepath = find_executable(path, argv->argv[0]);
+	if (filepath == NULL)
+	{
+		print_err(argV[0]);
+		free_argv(argv);
+		return (NULL);
+	}
+	argv->argv[0] = filepath;
+	filepath = execute_helper(argv, path, argV);
+	if (filepath == NULL)
+	{
+		free_resources(path, argv);
+		return (NULL);
+	}
+	return (filepath);
+}
+
 /**
  * execute_file - Executes the file specified in lineptr.
  * @lineptr: Pointer to the string representing the file path.
@@ -54,6 +76,7 @@ char *execute_helper(custom_args *argv, env_var *path, char *argV[])
  *
  * Return: The file path on success, or NULL on failure.
  */
+
 char *execute_file(char *lineptr, char *argV[], int exit_status)
 {
 	char *filepath = NULL;
@@ -83,23 +106,7 @@ char *execute_file(char *lineptr, char *argV[], int exit_status)
 		}
 		else if (_strcmp(message, "Not setenv or unsetenv") == 0)
 		{
-			filepath = find_executable(path, argv->argv[0]);
-			if (filepath == NULL)
-			{
-				exit_status = 127;
-				print_err(argV[0]);
-				free(argv->lineptr_cpy);
-				free(argv->argv);
-				free(argv);
-				return (NULL);
-			}
-			argv->argv[0] = filepath;
-			filepath = execute_helper(argv, path, argV);
-			if (filepath == NULL)
-			{
-				free_resources(path, argv);
-				return (NULL);
-			}
+			filepath = find_and_execute(path, argv, argV);
 			return (filepath);
 		}
 		free_resources(path, argv);
